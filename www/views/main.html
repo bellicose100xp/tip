@@ -8,13 +8,19 @@
 
                     <label class="item item-input">
                         <span class="input-label">Bill Amount ($)</span>
-                        <input ng-model="mc.billAmount" type="text">
+                        <input ng-model="mc.billAmount" type="number">
                     </label>
 
                     <label class="item item-input">
                         <span class="input-label"># of people</span>
-                        <input ng-model="mc.numberOfPeople" type="text">
+                        <input ng-model="mc.numberOfPeople" type="number">
                     </label>
+
+                    <div class="item range">
+                        Tip %
+                        <input type="range" name="volume" min="0" max="25" steps="5">
+                        <i class="icon ion-cash balanced"></i>
+                    </div>
 
                     <button class="button button-full button-royal" type="submit"> Calculate Even Split </button>
 
