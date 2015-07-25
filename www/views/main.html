@@ -11,15 +11,21 @@
                         <input ng-model="mc.billAmount" type="number">
                     </label>
 
-                    <label class="item item-input">
-                        <span class="input-label"># of people</span>
-                        <input ng-model="mc.numberOfPeople" type="number">
-                    </label>
+                    <!--<label class="item item-input">-->
+                        <!--<span class="input-label"># of people</span>-->
+                        <!--<input ng-model="mc.numberOfPeople" type="number">-->
+                    <!--</label>-->
 
                     <div class="item range">
-                        Tip % {{mc.tip}}
-                        <input ng-model="mc.tip" type="range" name="volume" min="0" max="25" steps="5">
-                        <i class="icon ion-cash balanced"></i>
+                        # of people
+                        <input ng-model="mc.numberOfPeople" type="range" name="numberOfpeople" min="2" max="10" step="1">
+                        <span class="assertive bold"> {{mc.numberOfPeople}} </span>
+                    </div>
+
+                    <div class="item range">
+                        Tip
+                        <input ng-model="mc.tip" type="range" name="tip" min="0" max="25" step="5">
+                        <span class="assertive bold"> {{mc.tip}} % </span>
                     </div>
 
                     <button class="button button-full button-royal" type="submit"> Calculate Even Split </button>
@@ -28,9 +34,15 @@
             </form>
 
         <div class="card">
-            <div class="item item-text-wrap">
+
+            <div class="item item-text-wrap item-stable">
+                Tip Amount: {{mc.tipAmount | currency}}
+            </div>
+
+            <div class="item item-text-wrap item-assertive">
                 Even Split: {{mc.evenSplit | currency}}
             </div>
+
         </div>
 
     </ion-content>
