@@ -17,8 +17,8 @@
                     </label>
 
                     <div class="item range">
-                        Tip %
-                        <input type="range" name="volume" min="0" max="25" steps="5">
+                        Tip % {{mc.tip}}
+                        <input ng-model="mc.tip" type="range" name="volume" min="0" max="25" steps="5">
                         <i class="icon ion-cash balanced"></i>
                     </div>
 
