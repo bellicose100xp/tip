@@ -3,3 +3,24 @@
 .bold {
     font-weight: bold;
 }
+
+.big {
+    font-size: large;
+}
+
+.boldx {
+    font-weight: bold;
+}
+
+.bigx {
+    font-size: x-large;
+}
+
+.input-label {
+    font-size: large;
+    font-weight: bold;
+}
+
+#bill-amount {
+    font-size: large;
+}

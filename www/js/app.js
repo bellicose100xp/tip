@@ -21,13 +21,32 @@ angular.module('starter', ['ionic'])
     .config(function ($stateProvider, $urlRouterProvider) {
 
         $stateProvider
-            .state('main', {
-                url: '/',
-                templateUrl: 'views/main.html',
-                controller: 'mainController as mc'
+            .state('tabs', {
+                url: '/tab',
+                abstract: true,
+                templateUrl: 'views/tabs.html'
+            })
+            .state('tabs.tip', {
+                url: '/tip',
+                views: {
+                    'tip-tab': {
+                        templateUrl: 'views/tip.html',
+                        controller: 'mainController as mc'
+                    }
+                }
+            })
+            .state('tabs.discount', {
+                url: '/discount',
+                views: {
+                    'discount-tab': {
+                        templateUrl: 'views/discount.html',
+                        controller: 'discountController as dc'
+                    }
+                }
+
             });
 
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise("/tab/tip");
 
     });
 
