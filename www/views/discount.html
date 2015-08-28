@@ -1,10 +1,10 @@
 <ion-pane>
     <ion-header-bar class="">
 
-        <h1 class="title" style="font-size: large"><span class="icon ion-heart assertive"></span>
-            <span class="icon ion-heart assertive"></span> Love Jeannie
-            <span class="icon ion-heart assertive"></span>
-            <span class="icon ion-heart assertive"></span></h1>
+        <h1 class="title" style="font-size: large"><span class="icon ion-heart royal"></span>
+            <span class="icon ion-heart royal"></span> Love Jeannie
+            <span class="icon ion-heart royal"></span>
+            <span class="icon ion-heart royal"></span></h1>
 
     </ion-header-bar>
 
@@ -22,7 +22,7 @@
                 <input ng-model="dc.discountPercent" ng-change="dc.calculateDiscount()" type="range" name="tip" min="5"
                        max="90"
                        step="5">
-                <span class="assertive bold big"> {{dc.discountPercent}} % </span>
+                <span class="royal bold big"> {{dc.discountPercent}} % </span>
             </div>
 
 
@@ -30,7 +30,7 @@
                 Tax
                 <input ng-model="dc.tax" ng-change="dc.calculateDiscount()" type="range"
                        name="tax" min="7" max="12" step="0.25">
-                <span class="assertive bold big"> {{dc.tax | number:2}} % </span>
+                <span class="royal bold big"> {{dc.tax | number:2}} % </span>
             </div>
 
 
@@ -44,7 +44,7 @@
                     class="bold">Tax:</span> {{dc.finalTaxAmount | currency}}
             </div>
 
-            <div class="item item-text-wrap item-assertive bigx boldx">
+            <div class="item item-text-wrap item-royal bigx boldx">
                 Final Price: {{dc.finalPrice | currency}}
             </div>
         </div>

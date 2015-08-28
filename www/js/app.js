@@ -23,11 +23,13 @@ angular.module('starter', ['ionic'])
         $stateProvider
             .state('tabs', {
                 url: '/tab',
+                cache: false,
                 abstract: true,
                 templateUrl: 'views/tabs.html'
             })
             .state('tabs.tip', {
                 url: '/tip',
+                cache: false,
                 views: {
                     'tip-tab': {
                         templateUrl: 'views/tip.html',
@@ -37,6 +39,7 @@ angular.module('starter', ['ionic'])
             })
             .state('tabs.discount', {
                 url: '/discount',
+                cache: false,
                 views: {
                     'discount-tab': {
                         templateUrl: 'views/discount.html',
