@@ -39,6 +39,10 @@
 
         <div class="card">
 
+            <div ng-if="dc.location" class="item item-text-wrap item-stable">
+                <span class="bold">Tax Location:</span> {{dc.location}}
+            </div>
+
             <div class="item item-text-wrap item-stable">
                 <span class="bold">Discount:</span> {{dc.totalDiscount | currency}} &nbsp;&nbsp; <span
                     class="bold">Tax:</span> {{dc.finalTaxAmount | currency}}
