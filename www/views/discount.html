@@ -14,16 +14,26 @@
 
                 <label class="item item-input big bold">
                     <span class="input-label">List Price ($)</span>
-                    <input id="price-amount" ng-change="dc.calculateDiscount()" ng-model="dc.price" type="number">
+                    <input ng-show="!dc.advanced" id="price-amount" ng-change="dc.calculateDiscount()" ng-model="dc.inputPriceAsIs" type="number">
+                    <input ng-show="dc.advanced" id="price-amount-adv" placeholder="Expression allowed like X+Y or X*3" ng-change="dc.calculateDiscount()" ng-model="dc.inputPriceAsIs" type="text">
                 </label>
 
                 <div class="item range big bold">
                     Discount
-                    <input ng-model="dc.discountPercent" ng-change="dc.calculateDiscount()" type="range" name="tip"
+                    <input ng-model="dc.discountPercent" ng-change="dc.calculateDiscount()" type="range" name="discount"
                            min="0"
                            max="90"
                            step="5">
                     <span class="royal bold big"> {{dc.discountPercent}} % </span>
+                </div>
+
+                <div ng-if="dc.advanced" class="item range big bold">
+                    Add Disc
+                    <input ng-model="dc.discountPercentAdditional" ng-change="dc.calculateDiscount()" type="range" name="discount-additional"
+                           min="0"
+                           max="90"
+                           step="5">
+                    <span class="royal bold big"> {{dc.discountPercentAdditional}} % </span>
                 </div>
 
 
@@ -53,13 +63,17 @@
                 </span>
             </div>
 
-            <div ng-show="dc.showZipCodeInputBox" class="item item-input-inset">
+            <div ng-show="dc.showZipCodeInputBox && !dc.manualLocation" class="item item-input-inset">
                 <label class="item-input-wrapper">
                     <input type="tel" placeholder="Enter Zip Code" ng-model="dc.zipCode">
                 </label>
                 <button class="button button-energized button-small" ng-click="dc.getZipAndTax()">
                     Get Tax
                 </button>
+            </div>
+
+            <div ng-if="dc.advanced" class="item item-text-wrap item-stable">
+                <span class="bold">Subtotal:</span> {{dc.price | currency}}
             </div>
 
             <div class="item item-text-wrap item-stable">
@@ -71,6 +85,8 @@
                 Final Price: {{dc.finalPrice | currency}}
             </div>
         </div>
+
+        <ion-toggle ng-model="dc.advanced" toggle-class="toggle-calm">Advanced Mode</ion-toggle>
 
     </ion-content>
 </ion-pane>

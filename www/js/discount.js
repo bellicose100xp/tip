@@ -27,6 +27,11 @@ angular.module('starter')
             dc.manualLocation = false;
             dc.zipCode = '';
             dc.showZipCodeInputBox = false;
+            dc.advanced = false;
+            dc.inputPriceAsIs = '';
+            dc.discountPercentAdditional = 0;
+            dc.additonalDiscount = 0;
+            dc.originalDiscount = 0;
 
             var getLocationAndTax = function () {
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -119,31 +124,98 @@ angular.module('starter')
 
             $ionicPlatform.ready(getLocationAndTax); // run once on app load;
 
-
             dc.calculateDiscount = function () {
-                console.log(dc.price);
-                if (dc.price) {
-                    console.log(isNaN(dc.price));
 
-                    if (isNaN(dc.price)) {
-                        dc.price = eval(dc.price);
-                        console.log('isNan', dc.price);
+                var lastCharacter = '';
+
+                if (document.querySelector('#price-amount-adv')) {
+                    var advVal = document.querySelector('#price-amount-adv').value;
+                    var len = advVal.length;
+                    var secondLastCharacter = advVal.substr(len - 2, 1);
+
+                    lastCharacter = advVal.substr(len - 1);
+
+                    if (isNaN(lastCharacter)) {
+
+                        if (secondLastCharacter === '+' ||
+                            secondLastCharacter === '-' ||
+                            secondLastCharacter === '*' ||
+                            secondLastCharacter === '/' ||
+                            secondLastCharacter === '.') {
+                            advVal = advVal.substr(0, len - 1);
+                            len = advVal.length;
+                        }
+
+                        if (lastCharacter === '+' ||
+                            lastCharacter === '-' ||
+                            lastCharacter === '*' ||
+                            lastCharacter === '/' ||
+                            lastCharacter === '.') {
+                            console.log('last', advVal.substr(0, len - 1));
+                            dc.inputPriceAsIs = advVal.substr(0, len - 1);
+                        } else {
+                            dc.inputPriceAsIs = advVal.substr(0, len - 1);
+                            lastCharacter = '';
+                        }
+
+
+                    } else {
+                        lastCharacter = '';
+                    }
+                }
+
+
+                if (dc.inputPriceAsIs) {
+
+                    if (isNaN(dc.inputPriceAsIs)) {
+                        dc.price = eval(dc.inputPriceAsIs);
+                        // console.log('inside if', dc.price);
+                    } else {
+                        dc.price = dc.inputPriceAsIs;
+                        // console.log('inside else', dc.price);
                     }
 
-                    dc.totalDiscount = dc.price * (dc.discountPercent / 100);
-                    dc.finalPriceBeforeTax = ( dc.price - dc.totalDiscount );
-                    dc.finalTaxAmount = dc.finalPriceBeforeTax * (dc.tax / 100);
-                    dc.finalPrice = dc.finalPriceBeforeTax + dc.finalTaxAmount;
+                    if (!isNaN(dc.price)) {
+                        dc.originalDiscount = dc.price * (dc.discountPercent / 100);
+
+                        dc.finalPriceBeforeTax = ( dc.price - dc.originalDiscount);
+
+                        // Apply additional discount if present;
+                        dc.additonalDiscount = dc.finalPriceBeforeTax * (dc.discountPercentAdditional / 100);
+                        dc.totalDiscount = dc.originalDiscount + dc.additonalDiscount;
+                        dc.finalPriceBeforeTax = dc.price - dc.totalDiscount;
+
+                        dc.finalTaxAmount = dc.finalPriceBeforeTax * (dc.tax / 100);
+                        dc.finalPrice = dc.finalPriceBeforeTax + dc.finalTaxAmount;
+                    }
+
+                }
+
+                if (lastCharacter) {
+                    dc.inputPriceAsIs = dc.inputPriceAsIs + lastCharacter;
                 }
             };
 
             var priceAmountInputBox = document.querySelector('#price-amount');
+            var priceAmountInputBoxAdv = document.querySelector('#price-amount-adv');
+
 
             $ionicGesture.on('touch', function (event) {
-                if (document.activeElement.id === priceAmountInputBox.id) {
-                    // install ionic-plugin-keyboard for this.
-                    cordova.plugins.Keyboard.close();
+
+                if (priceAmountInputBox) {
+                    if (document.activeElement.id === priceAmountInputBox.id) {
+                        // install ionic-plugin-keyboard for this.
+                        cordova.plugins.Keyboard.close();
+                    }
                 }
+
+                if (priceAmountInputBoxAdv) {
+                        if (document.activeElement.id === priceAmountInputBoxAdv.id) {
+                            // install ionic-plugin-keyboard for this.
+                            cordova.plugins.Keyboard.close();
+                        }
+                    }
+
             }, angular.element(document));
 
             dc.recalculateTaxByLocationAgain = function () {
@@ -163,7 +235,6 @@ angular.module('starter')
             dc.getZipAndTax = function () {
                 dc.showZipCodeInputBox = false;
                 getZipAndTax();
-            }
-
+            };
 
         }]);

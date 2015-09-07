@@ -49,7 +49,7 @@ angular.module('starter', ['ionic', 'ngCordova'])
 
             });
 
-        $urlRouterProvider.otherwise("/tab/tip");
+        $urlRouterProvider.otherwise("/tab/discount");
 
     });
 
