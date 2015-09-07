@@ -23,7 +23,7 @@ angular.module('starter', ['ionic', 'ngCordova'])
         $stateProvider
             .state('tabs', {
                 url: '/tab',
-               // cache: false,
+                cache: false,
                 abstract: true,
                 templateUrl: 'views/tabs.html'
             })
