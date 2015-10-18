@@ -18,11 +18,11 @@ angular.module('starter')
             var dc = this;
             dc.price = '';
             dc.tax = 0; //percent
-            dc.discountPercent = 20; //percent
+            dc.tipPercent = 20; //percent
             dc.totalDiscount = '';
-            dc.finalPriceBeforeTax = '';
+            dc.subtotal = '';
             dc.finalPrice = '';
-            dc.finalTaxAmount = '';
+            dc.taxTotal = '';
             dc.location = '';
             dc.manualLocation = false;
             dc.zipCode = '';
@@ -31,7 +31,7 @@ angular.module('starter')
             dc.inputPriceAsIs = '';
             dc.discountPercentAdditional = 0;
             dc.additonalDiscount = 0;
-            dc.originalDiscount = 0;
+            dc.tipAmount = 0;
 
             var getLocationAndTax = function () {
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -176,17 +176,17 @@ angular.module('starter')
                     }
 
                     if (!isNaN(dc.price)) {
-                        dc.originalDiscount = dc.price * (dc.discountPercent / 100);
+                        dc.tipAmount = dc.price * (dc.tipPercent / 100);
 
-                        dc.finalPriceBeforeTax = ( dc.price - dc.originalDiscount);
+                        dc.subtotal = ( dc.price - dc.tipAmount);
 
                         // Apply additional discount if present;
-                        dc.additonalDiscount = dc.finalPriceBeforeTax * (dc.discountPercentAdditional / 100);
-                        dc.totalDiscount = dc.originalDiscount + dc.additonalDiscount;
-                        dc.finalPriceBeforeTax = dc.price - dc.totalDiscount;
+                        dc.additonalDiscount = dc.subtotal * (dc.discountPercentAdditional / 100);
+                        dc.totalDiscount = dc.tipAmount + dc.additonalDiscount;
+                        dc.subtotal = dc.price - dc.totalDiscount;
 
-                        dc.finalTaxAmount = dc.finalPriceBeforeTax * (dc.tax / 100);
-                        dc.finalPrice = dc.finalPriceBeforeTax + dc.finalTaxAmount;
+                        dc.taxTotal = dc.subtotal * (dc.tax / 100);
+                        dc.finalPrice = dc.subtotal + dc.taxTotal;
                     }
 
                 }

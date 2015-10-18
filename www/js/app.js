@@ -47,9 +47,20 @@ angular.module('starter', ['ionic', 'ngCordova'])
                     }
                 }
 
+            })
+            .state('tabs.single', {
+                url: '/single',
+                cache: false,
+                views: {
+                    'single-tab': {
+                        templateUrl: 'views/single.html',
+                        controller: 'singleController as sc'
+                    }
+                }
+
             });
 
-        $urlRouterProvider.otherwise("/tab/discount");
+        $urlRouterProvider.otherwise("/tab/single");
 
     });
 
