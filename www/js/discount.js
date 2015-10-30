@@ -24,7 +24,7 @@ angular.module('starter')
             dc.finalPrice = '';
             dc.taxTotal = '';
             dc.location = '';
-            dc.manualLocation = false;
+            dc.manualLocation = true;
             dc.zipCode = '';
             dc.showZipCodeInputBox = false;
             dc.advanced = false;
@@ -32,6 +32,7 @@ angular.module('starter')
             dc.discountPercentAdditional = 0;
             dc.additonalDiscount = 0;
             dc.tipAmount = 0;
+            dc.showLocationErrorMessage = false;
 
             var getLocationAndTax = function () {
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -51,7 +52,7 @@ angular.module('starter')
 
                         var bingMapApiUrl = 'https://dev.virtualearth.net/REST/v1/Locations/' + latlong + '?o=json&key=' + bingMapKey;
 
-                        $http.get(bingMapApiUrl)
+                        $http.jsonp(bingMapApiUrl)
                             .then(function (mapData) {
 
                                 //  console.log(mapData.data.resourceSets[0].resources[0].address);
@@ -89,6 +90,7 @@ angular.module('starter')
                             })
 
                     }, function (err) {
+                        dc.showLocationErrorMessage = true;
                         console.log('ngCordova Location Error: ', err);
                     });
 
@@ -121,8 +123,8 @@ angular.module('starter')
                     });
             };
 
-
-            $ionicPlatform.ready(getLocationAndTax); // run once on app load;
+            // don't get location on tab switch because Apple location guidelines don't allow it
+            // $ionicPlatform.ready(getLocationAndTax); // run once on app load;
 
             dc.calculateDiscount = function () {
 
@@ -189,6 +191,12 @@ angular.module('starter')
                         dc.finalPrice = dc.subtotal + dc.taxTotal;
                     }
 
+                } else {
+                    dc.tipAmount = 0;
+                    dc.totalDiscount = 0;
+                    dc.subtotal = 0;
+                    dc.taxTotal = 0;
+                    dc.finalPrice = 0;
                 }
 
                 if (lastCharacter) {
@@ -236,5 +244,9 @@ angular.module('starter')
                 dc.showZipCodeInputBox = false;
                 getZipAndTax();
             };
+
+            dc.resetLocationErrorMessage = function () {
+                dc.showLocationErrorMessage = false;
+            }
 
         }]);

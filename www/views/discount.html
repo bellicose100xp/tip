@@ -1,10 +1,13 @@
-<ion-pane>
+<ion-pane ng-cloak>
     <ion-header-bar class="">
 
-        <h1 class="title" style="font-size: large"><span class="icon ion-heart royal"></span>
-            <span class="icon ion-heart royal"></span> Love Jeannie
-            <span class="icon ion-heart royal"></span>
-            <span class="icon ion-heart royal"></span></h1>
+        <h1 class="title" style="font-size: large">
+            <!--<span class="icon ion-heart royal"></span>-->
+            <!--<span class="icon ion-heart royal"></span> -->
+            Discounts
+            <!--<span class="icon ion-heart royal"></span>-->
+            <!--<span class="icon ion-heart royal"></span>-->
+        </h1>
 
     </ion-header-bar>
 
@@ -14,13 +17,13 @@
 
                 <label class="item item-input big bold">
                     <span class="input-label">List Price ($)</span>
-                    <input ng-show="!dc.advanced" id="price-amount" ng-change="dc.calculateDiscount()" ng-model="dc.inputPriceAsIs" type="number">
-                    <input ng-show="dc.advanced" id="price-amount-adv" placeholder="Expression allowed like X+Y or X*3" ng-change="dc.calculateDiscount()" ng-model="dc.inputPriceAsIs" type="text">
+                    <input ng-if="!dc.advanced" id="price-amount" ng-change="dc.calculateDiscount()" ng-model="dc.inputPriceAsIs" type="number">
+                    <input ng-if="dc.advanced" id="price-amount-adv" placeholder="Expression allowed like X+Y or X*3" ng-change="dc.calculateDiscount()" ng-model="dc.inputPriceAsIs" type="text">
                 </label>
 
                 <div class="item range big bold">
                     Discount
-                    <input ng-model="dc.discountPercent" ng-change="dc.calculateDiscount()" type="range" name="discount"
+                    <input ng-model="dc.tipPercent" ng-change="dc.calculateDiscount()" type="range" name="discount"
                            min="0"
                            max="90"
                            step="5">
@@ -56,6 +59,10 @@
                 <span class="bold">Tax Location: </span><span class="bold balanced">{{dc.location}}</span>
             </div>
 
+            <div ng-if="dc.manualLocation" class="item item-divider">
+                Get current tax rate for...
+            </div>
+
             <div id="manual" ng-show="dc.manualLocation" class="item item-text-wrap item-stable text-center">
                 <span id="manual-span" class="button-bar bold">
                     <a class="button button-balanced" ng-click="dc.recalculateTaxByLocationAgain()">Current Location</a>
@@ -63,7 +70,11 @@
                 </span>
             </div>
 
-            <div ng-show="dc.showZipCodeInputBox && !dc.manualLocation" class="item item-input-inset">
+            <div ng-if="dc.showLocationErrorMessage" ng-click="dc.resetLocationErrorMessage()" class="item item-divider item-text-wrap item-assertive">
+                Unable to get location. Please enable location services for this app by going to 'Settings' -> 'Privacy' -> 'Location Services' to enjoy this feature. Tap this message to dismiss!
+            </div>
+
+            <div ng-if="dc.showZipCodeInputBox && !dc.manualLocation" class="item item-input-inset">
                 <label class="item-input-wrapper">
                     <input type="tel" placeholder="Enter Zip Code" ng-model="dc.zipCode">
                 </label>
@@ -78,7 +89,7 @@
 
             <div class="item item-text-wrap item-stable">
                 <span class="bold">Discount:</span> {{dc.totalDiscount | currency}} &nbsp;&nbsp; <span
-                    class="bold">Tax:</span> {{dc.finalTaxAmount | currency}}
+                    class="bold">Tax:</span> {{dc.taxTotal | currency}}
             </div>
 
             <div class="item item-text-wrap item-royal bigx boldx">

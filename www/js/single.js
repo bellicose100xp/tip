@@ -24,7 +24,7 @@ angular.module('starter')
                 sc.finalPrice = '';
                 sc.taxTotal = '';
                 sc.location = '';
-                sc.manualLocation = false;
+                sc.manualLocation = true;
                 sc.zipCode = '';
                 sc.showZipCodeInputBox = false;
                 sc.advanced = true;
@@ -33,6 +33,7 @@ angular.module('starter')
                 sc.discountPercentAdditional = 0;
                 sc.additonalDiscount = 0;
                 sc.tipAmount = 0;
+                sc.showLocationErrorMessage = false;
 
                 var getLocationAndTax = function () {
                     var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -52,7 +53,7 @@ angular.module('starter')
 
                             var bingMapApiUrl = 'https://dev.virtualearth.net/REST/v1/Locations/' + latlong + '?o=json&key=' + bingMapKey;
 
-                            $http.get(bingMapApiUrl)
+                            $http.jsonp(bingMapApiUrl)
                                 .then(function (mapData) {
 
                                     //  console.log(mapData.data.resourceSets[0].resources[0].address);
@@ -91,6 +92,7 @@ angular.module('starter')
                                 })
 
                         }, function (err) {
+                            sc.showLocationErrorMessage = true;
                             console.log('ngCordova Location Error: ', err);
                         });
 
@@ -124,11 +126,11 @@ angular.module('starter')
                         });
                 };
 
-
-                $ionicPlatform.ready(getLocationAndTax); // run once on app load;
+                // Violated apple location guidelines
+                // $ionicPlatform.ready(getLocationAndTax); // run once on app load;
 
                 sc.calculateDiscount = function () {
-                   // console.log('calculating..');
+                    // console.log('calculating..');
 
                     var lastCharacter = '';
 
@@ -175,7 +177,9 @@ angular.module('starter')
                             sc.price = eval(sc.inputPriceAsIs);
                             // console.log('inside if', dc.price);
                         } else {
+
                             sc.price = sc.inputPriceAsIs;
+                           // console.log(typeof sc.price);
                             // console.log('inside else', dc.price);
                         }
 
@@ -187,16 +191,23 @@ angular.module('starter')
 
                             sc.subtotal = sc.price + sc.taxTotal;
 
-                            sc.tipAmount = sc.tipBeforeTax ?  sc.price * (sc.tipPercent / 100) : sc.subtotal * (sc.tipPercent / 100);
+                            sc.tipAmount = sc.tipBeforeTax ? sc.price * (sc.tipPercent / 100) : sc.subtotal * (sc.tipPercent / 100);
 
                             sc.finalPrice = sc.subtotal + sc.tipAmount;
                         }
 
+                    } else {
+                        sc.subtotal = 0;
+                        sc.taxTotal = 0;
+                        sc.tipAmount = 0;
+                        sc.finalPrice = 0;
                     }
 
                     if (lastCharacter) {
                         sc.inputPriceAsIs = sc.inputPriceAsIs + lastCharacter;
                     }
+
+                    console.log('here');
                 };
 
                 var priceAmountInputBox = document.querySelector('#price-amount');
@@ -239,5 +250,9 @@ angular.module('starter')
                     sc.showZipCodeInputBox = false;
                     getZipAndTax();
                 };
+
+                sc.resetLocationErrorMessage = function () {
+                    sc.showLocationErrorMessage = false;
+                }
 
             }]);

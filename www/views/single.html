@@ -1,43 +1,48 @@
-<ion-pane>
+<ion-pane ng-cloak>
     <ion-header-bar class="">
 
-        <h1 class="title" style="font-size: large"><span class="icon ion-heart royal"></span>
-            <span class="icon ion-heart royal"></span> Love Jeannie
-            <span class="icon ion-heart royal"></span>
-            <span class="icon ion-heart royal"></span></h1>
+        <h1 class="title" style="font-size: large">
+            <!--<span class="icon ion-heart calm"></span>-->
+            <!--<span class="icon ion-heart calm"></span> -->
+            Tip - Individual
+            <!--<span class="icon ion-heart calm"></span>-->
+            <!--<span class="icon ion-heart calm"></span>-->
+        </h1>
 
     </ion-header-bar>
 
     <ion-content>
 
-            <div class="list">
+        <div class="list">
 
-                <label class="item item-input big bold">
-                    <span class="input-label">Bill Amount ($)</span>
-                    <input ng-show="!sc.advanced" id="price-amount" ng-change="sc.calculateDiscount()" ng-model="sc.inputPriceAsIs" type="number">
-                    <input ng-show="sc.advanced" id="price-amount-adv" placeholder="add numbers like 23+45+87 etc" ng-change="sc.calculateDiscount()" ng-model="sc.inputPriceAsIs" type="text">
-                </label>
+            <label class="item item-input big bold">
+                <span class="input-label">Bill Amount ($)</span>
+                <input ng-if="!sc.advanced" id="price-amount" ng-change="sc.calculateDiscount()"
+                       ng-model="sc.inputPriceAsIs" type="number">
+                <input ng-if="sc.advanced" id="price-amount-adv" placeholder="add numbers like 23+45+87 etc"
+                       ng-change="sc.calculateDiscount()" ng-model="sc.inputPriceAsIs" type="text">
+            </label>
 
-                <div class="item range big bold">
-                    Tip
-                    <input ng-model="sc.tipPercent" ng-change="sc.calculateDiscount()" type="range" name="discount"
-                           min="0"
-                           max="25"
-                           step="5">
-                    <span class="royal bold big"> {{sc.tipPercent}} % </span>
-                </div>
-
-
-                <div class="item range big bold">
-                    Tax
-                    <input id="taxinput" on-touch="sc.checkTaxInputChange()" ng-model="sc.tax"
-                           ng-change="sc.calculateDiscount()" type="range"
-                           name="tax" min="0" max="12" step="0.25">
-                    <span class="bold big" ng-class="{ 'balanced': !sc.manualLocation, 'royal': sc.manualLocation}"> {{sc.tax | number:2}} % </span>
-                </div>
-
-
+            <div class="item range big bold">
+                Tip
+                <input ng-model="sc.tipPercent" ng-change="sc.calculateDiscount()" type="range" name="discount"
+                       min="0"
+                       max="25"
+                       step="5">
+                <span class="calm bold big"> {{sc.tipPercent}} % </span>
             </div>
+
+
+            <div class="item range big bold">
+                Tax
+                <input id="taxinput" on-touch="sc.checkTaxInputChange()" ng-model="sc.tax"
+                       ng-change="sc.calculateDiscount()" type="range"
+                       name="tax" min="0" max="12" step="0.25">
+                <span class="bold big" ng-class="{ 'balanced': !sc.manualLocation, 'royal': sc.manualLocation}"> {{sc.tax | number:2}} % </span>
+            </div>
+
+
+        </div>
 
 
         <div class="card">
@@ -47,6 +52,10 @@
                 <span class="bold">Tax Location: </span><span class="bold balanced">{{sc.location}}</span>
             </div>
 
+            <div ng-if="sc.manualLocation" class="item item-divider">
+                Get current tax rate for...
+            </div>
+
             <div id="manual" ng-show="sc.manualLocation" class="item item-text-wrap item-stable text-center">
                 <span id="manual-span" class="button-bar bold">
                     <a class="button button-balanced" ng-click="sc.recalculateTaxByLocationAgain()">Current Location</a>
@@ -54,7 +63,11 @@
                 </span>
             </div>
 
-            <div ng-show="sc.showZipCodeInputBox && !sc.manualLocation" class="item item-input-inset">
+            <div ng-if="sc.showLocationErrorMessage" ng-click="sc.resetLocationErrorMessage()" class="item item-divider item-text-wrap item-assertive">
+                Unable to get location. Please enable location services for this app by going to 'Settings' -> 'Privacy' -> 'Location Services' to enjoy this feature. Tap this message to dismiss!
+            </div>
+
+            <div ng-if="sc.showZipCodeInputBox && !sc.manualLocation" class="item item-input-inset">
                 <label class="item-input-wrapper">
                     <input type="tel" placeholder="Enter Zip Code" ng-model="sc.zipCode">
                 </label>
@@ -72,13 +85,15 @@
                     class="bold">Tax:</span> {{sc.taxTotal | currency}}
             </div>
 
-            <div class="item item-text-wrap item-royal bigx boldx">
+            <div class="item item-text-wrap item-calm bigx boldx">
                 Final Price: {{sc.finalPrice | currency}}
             </div>
         </div>
 
         <!--<ion-toggle ng-model="sc.advanced" toggle-class="toggle-calm">Advanced Mode</ion-toggle>-->
-        <ion-toggle ng-model="sc.tipBeforeTax" ng-change="sc.calculateDiscount()" toggle-class="toggle-calm">Calculate Tip Before Tax</ion-toggle>
+        <ion-toggle ng-model="sc.tipBeforeTax" ng-change="sc.calculateDiscount()" toggle-class="toggle-calm">Calculate
+            Tip Before Tax
+        </ion-toggle>
 
     </ion-content>
 </ion-pane>
