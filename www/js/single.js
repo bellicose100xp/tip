@@ -53,7 +53,7 @@ angular.module('starter')
 
                             var bingMapApiUrl = 'https://dev.virtualearth.net/REST/v1/Locations/' + latlong + '?o=json&key=' + bingMapKey;
 
-                            $http.jsonp(bingMapApiUrl)
+                            $http.get(bingMapApiUrl)
                                 .then(function (mapData) {
 
                                     //  console.log(mapData.data.resourceSets[0].resources[0].address);
@@ -207,7 +207,7 @@ angular.module('starter')
                         sc.inputPriceAsIs = sc.inputPriceAsIs + lastCharacter;
                     }
 
-                    console.log('here');
+                    //console.log('here');
                 };
 
                 var priceAmountInputBox = document.querySelector('#price-amount');
