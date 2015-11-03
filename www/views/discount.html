@@ -74,6 +74,10 @@
                 Unable to get location. Please enable location services for this app by going to 'Settings' -> 'Privacy' -> 'Location Services' to enjoy this feature. Tap this message to dismiss!
             </div>
 
+            <div ng-if="dc.showTaxErrorMessage" ng-click="dc.resetTaxErrorMessage()" class="item item-divider item-text-wrap item-assertive">
+                Unable to get Tax. Please try again after 60 seconds. Tap this message to dismiss!
+            </div>
+
             <div ng-if="dc.showZipCodeInputBox && !dc.manualLocation" class="item item-input-inset">
                 <label class="item-input-wrapper">
                     <input type="tel" placeholder="Enter Zip Code" ng-model="dc.zipCode">

@@ -34,6 +34,7 @@ angular.module('starter')
                 sc.additonalDiscount = 0;
                 sc.tipAmount = 0;
                 sc.showLocationErrorMessage = false;
+                sc.showTaxErrorMessage = false;
 
                 var getLocationAndTax = function () {
                     var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -86,8 +87,17 @@ angular.module('starter')
                                     //console.log(sc.tax);
                                     // console.log(tax.data.totalRate);
                                 }, function (err) {
-                                    sc.manualLocation = true;
-                                    sc.location = '';
+                                    if (err.status === 400) {
+                                        sc.manualLocation = true;
+                                        sc.location = '';
+                                        sc.location = "Invalid Zip Code";
+                                    }
+
+                                    if (err.status === 429) {
+                                        sc.manualLocation = true;
+                                        sc.location = '';
+                                        sc.showTaxErrorMessage = true;
+                                    }
                                     console.log('error getting tax: ', err);
                                 })
 
@@ -114,8 +124,17 @@ angular.module('starter')
 
                             return $http.get(requestUrl);
                         }, function (err) {
-                            sc.manualLocation = true;
-                            sc.location = "Invalid Zip Code";
+                            if (err.status === 400) {
+                                sc.manualLocation = true;
+                                sc.location = '';
+                                sc.location = "Invalid Zip Code";
+                            }
+
+                            if (err.status === 429) {
+                                sc.manualLocation = true;
+                                sc.location = '';
+                                sc.showTaxErrorMessage = true;
+                            }
                             console.log('error getting tax: ', err);
                         })
                         .then(function (zipCodeData) {
@@ -179,7 +198,7 @@ angular.module('starter')
                         } else {
 
                             sc.price = sc.inputPriceAsIs;
-                           // console.log(typeof sc.price);
+                            // console.log(typeof sc.price);
                             // console.log('inside else', dc.price);
                         }
 
@@ -253,6 +272,10 @@ angular.module('starter')
 
                 sc.resetLocationErrorMessage = function () {
                     sc.showLocationErrorMessage = false;
+                }
+
+                sc.resetTaxErrorMessage = function () {
+                    sc.showTaxErrorMessage = false;
                 }
 
             }]);

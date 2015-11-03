@@ -33,6 +33,7 @@ angular.module('starter')
             dc.additonalDiscount = 0;
             dc.tipAmount = 0;
             dc.showLocationErrorMessage = false;
+            dc.showTaxErrorMessage = false
 
             var getLocationAndTax = function () {
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -52,7 +53,7 @@ angular.module('starter')
 
                         var bingMapApiUrl = 'https://dev.virtualearth.net/REST/v1/Locations/' + latlong + '?o=json&key=' + bingMapKey;
 
-                        $http.jsonp(bingMapApiUrl)
+                        $http.get(bingMapApiUrl)
                             .then(function (mapData) {
 
                                 //  console.log(mapData.data.resourceSets[0].resources[0].address);
@@ -84,8 +85,17 @@ angular.module('starter')
                                 dc.tax = tax.data.totalRate;
                                 // console.log(tax.data.totalRate);
                             }, function (err) {
-                                dc.manualLocation = true;
-                                dc.location = '';
+                                if (err.status === 400) {
+                                    dc.manualLocation = true;
+                                    dc.location = '';
+                                    dc.location = "Invalid Zip Code";
+                                }
+
+                                if (err.status === 429) {
+                                    dc.manualLocation = true;
+                                    dc.location = '';
+                                    dc.showTaxErrorMessage = true;
+                                }
                                 console.log('error getting tax: ', err);
                             })
 
@@ -111,8 +121,17 @@ angular.module('starter')
 
                         return $http.get(requestUrl);
                     }, function (err) {
-                        dc.manualLocation = true;
-                        dc.location = "Invalid Zip Code";
+                        if (err.status === 400) {
+                            dc.manualLocation = true;
+                            dc.location = '';
+                            dc.location = "Invalid Zip Code";
+                        }
+
+                        if (err.status === 429) {
+                            dc.manualLocation = true;
+                            dc.location = '';
+                            dc.showTaxErrorMessage = true;
+                        }
                         console.log('error getting tax: ', err);
                     })
                     .then(function (zipCodeData) {
@@ -247,6 +266,10 @@ angular.module('starter')
 
             dc.resetLocationErrorMessage = function () {
                 dc.showLocationErrorMessage = false;
+            }
+
+            dc.resetTaxErrorMessage = function () {
+                dc.showTaxErrorMessage = false;
             }
 
         }]);
